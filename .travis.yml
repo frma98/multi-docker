@@ -1,0 +1,15 @@
+sudo: required
+services:
+  - docker
+
+befode_install:
+  - docker build -t frede68/react-test -f ./client/Dockerfile.dev ./client
+
+script:
+  - docker run -e CI=true frede68/react-test npm test
+
+after_success:
+  - docker build -t frede68/multi-client ./client
+  - docker build -t frede68/multi-nginx ./nginx
+  - docker build -t frede68/multi-server ./server
+  - docker build -t frede68/multi-worker ./worker
